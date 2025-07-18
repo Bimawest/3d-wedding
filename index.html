@@ -1361,8 +1361,7 @@
           <img src="images/gallery-5.jpg" alt="Galeri Gambar 5">
           <img src="images/gallery-6.jpg" alt="Galeri Gambar 6">
         </div>
-        <button id="previous" class="btn previous">
-          << /button>
+        <button id="previous" class="btn previous"><</button>
             <button id="next" class="btn next">></button>
       </div>
     </section>
@@ -1523,7 +1522,7 @@
         const now = new Date().getTime();
         const distance = countdownDate - now;
 
-        const days = Math.floor(distance % (1000 * 60 * 60 * 24));
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
