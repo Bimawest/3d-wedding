@@ -971,6 +971,22 @@
       display: block;
       /* Agar timestamp di baris baru */
     }
+    
+    /* Tambahkan ini ke file CSS utama Anda */
+.attendance-status {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.status-hadir {
+  color: green; /* Atau warna lain yang Anda suka untuk 'Hadir' */
+}
+
+.status-tidak-hadir {
+  color: red; /* Atau warna lain yang Anda suka untuk 'Tidak Hadir' */
+}
+
 
     /* Styling for the sticker selection */
     .sticker-selection {
@@ -1028,7 +1044,6 @@
       /* Size of sticker in wish card */
       height: 50px !important;
       /* Size of sticker in wish card */
-      border: 2px solid red !important;
       opacity: 1 !important;
       display: block !important;
       height: 40px;
@@ -1681,7 +1696,7 @@
       const formData = new FormData(form);
       // The 'Sticker' field is already added to formData by the hidden input
       // Make sure your Google Apps Script is configured to receive the 'Sticker' parameter.
-      fetch('https://script.google.com/macros/s/AKfycbzZEXcdTIarEeoWIHf0pi0JboUlOaNDa4GjETGxMruNOumMiq0aVnbHhsxeXoBLhcmj/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbyuR3xcwVyZTdkiVSnYkH2k2DMdZV1GApIGng6j9m3kxrm4NkxMK3YyMzub3qX4q3Lx/exec', {
         method: 'POST',
         body: formData
       })
@@ -1800,17 +1815,23 @@ function displayWishes(page) {
 
     let stickerHtml = '';
     // Kondisi 'if' diubah sedikit agar lebih tangguh terhadap spasi/null/undefined sebagai string
-    if (typeof wish.Sticker === 'string' && wish.Sticker.trim() !== '' && wish.Sticker.trim() !== 'undefined' && wish.Sticker.trim() !== 'null') {
+    if (typeof wish.Sticker === 'string' && wish.Sticker.trim()) {
       stickerHtml = `<img src="${wish.Sticker}" alt="Stiker" class="wish-sticker">`;
       console.log('DEBUG: stickerHtml DIBUAT:', stickerHtml); // Log jika stickerHtml dibuat
     } else {
       console.log('DEBUG: stickerHtml TIDAK DIBUAT karena kondisi tidak terpenuhi.'); // Log jika tidak dibuat
     }
+    // ... (kode yang sudah ada untuk mendapatkan data ucapan dan membuat wishCard)
+
+    // Tentukan status kehadiran dan kelas untuk styling
+    const kehadiran = wish.Status || 'Belum diisi'; // Teks default jika kosong
+    const statusClass = (kehadiran.toLowerCase() === 'hadir') ? 'status-hadir' : 'status-tidak-hadir';
 
     wishCard.innerHTML = `
       <div class="wish-initials">${initials}</div>
       <div class="wish-content">
         <p class="wish-name">${wish.Nama || 'Anonim'}</p>
+        <span class="attendance-status ${statusClass}">${kehadiran}</span>
         <p class="wish-message">${wish.Ucapan || 'Tidak ada ucapan'}</p>
         <span class="wish-timestamp">${timestamp}</span>
       </div>
@@ -1860,7 +1881,7 @@ function displayWishes(page) {
       paginationControls.style.display = 'none';
       loading.style.display = 'block';
 
-      fetch('https://script.google.com/macros/s/AKfycbzZEXcdTIarEeoWIHf0pi0JboUlOaNDa4GjETGxMruNOumMiq0aVnbHhsxeXoBLhcmj/exec')
+      fetch('https://script.google.com/macros/s/AKfycbyuR3xcwVyZTdkiVSnYkH2k2DMdZV1GApIGng6j9m3kxrm4NkxMK3YyMzub3qX4q3Lx/exec')
         .then(response => {
           if (!response.ok) {
             console.error('Network response was not ok:', response.status, response.statusText);
