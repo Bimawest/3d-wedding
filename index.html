@@ -617,6 +617,7 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease;
+      transform: scale(0.0);
     }
 
     .image-grid img:hover {
@@ -756,7 +757,72 @@
       color: white;
       text-align: center;
     }
+    
+    .image-grid.show img {
+    animation: slide 2s ease-in-out forwards;
+    transform: scale(1);
+    opacity: 1; /* Pastikan opacity menjadi 1 saat ditampilkan */
+}
 
+@keyframes slide {
+    0% {
+        transform: scale(0.0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+    .list-group-item {
+  height: 170px;
+  background-color: white;
+  font-family: Sans-Serif;
+  font-size: 18px;
+  margin: 10px;
+  padding-top: 30px;
+  border-radius: 15px;
+}
+
+ul {
+  font-family: Sans-Serif;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#mandiri {
+  background-image: url('images/debit2.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+#bri {
+  background-image: url('images/debit1.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+#mandiri #bri, .btn {
+    display: flex;
+    flex-direction: row;
+    font-size: 1rem;
+}
+
+.fade-transition {
+    transition: opacity 1.5s ease-in-out;
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+    
     @media (min-width: 768px) {
       .story-event {
         flex-direction: row;
@@ -1369,7 +1435,7 @@
           <p class="event-address">
             Jl. poros balikpapan-hdl 2 sanipah Rt.. Gg..., Kel..., Kec. Samboja
           </p>
-          <a href="https://maps.app.goo.gl/YOUR_Maps_LINK_AKAD" target="_blank" class="google-maps-btn">Google Maps</a>
+          <a href="https://maps.app.goo.gl/NiFWSwjxtbpmWMwL8" target="_blank" class="google-maps-btn">Google Maps</a>
         </div>
 
         <div class="event-card"
@@ -1383,7 +1449,7 @@
           <p class="event-address">
             Jl. Contoh Raya No. 123, Pusat Kota, Samboja
           </p>
-          <a href="https://maps.app.goo.gl/YOUR_Maps_LINK_RESEPSI" target="_blank" class="google-maps-btn">Google
+          <a href="https://maps.app.goo.gl/NiFWSwjxtbpmWMwL8" target="_blank" class="google-maps-btn">Google
             Maps</a>
         </div>
       </div>
@@ -1465,6 +1531,24 @@
         <p>Doa Restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika memberi adalah ungkapan tanda
           kasih Anda, Anda dapat memberi kado secara cashless.</p>
         <button class="send-gift-btn">Kirim Hadiah</button>
+        <div class="row justify-content-center text-center">
+    <div class="col-md-6">
+        <ul class="list-group">
+            <li id="mandiri" class="list-group-item">
+                <div class="fw-bold">Mandiri</div>
+                Bima
+                <br>0123456789
+                <button class="btn btn-sm btn-primary" onclick="copyToClipboard('0123456789')">Salin</button>
+            </li>
+            <li id="bri" class="list-group-item">
+                <div id="Marlisa"class="fw-bold">BRI</div>
+                Alya
+                <br>9876543210
+                <button class="btn btn-sm btn-primary" onclick="copyToClipboard('9876543210')">Salin</button>
+            </li>
+        </ul>
+    </div>
+</div>
       </div>
     </section>
 
@@ -2044,6 +2128,106 @@ function displayWishes(page) {
     // Inisialisasi tampilan jumlah gambar
     updateImageCount();
   </script>
+  
+  <!-- script animasi gallery -->
+<script>
+    const slider = document.querySelectorAll('.gallery-section .image-grid');
+
+  function reveal() {
+    for (let i = 0; i < slider.length; i++) {
+        let windowHeight = window.innerHeight;
+        let elementTop = slider[i].getBoundingClientRect().top;
+        let elementVisible = 150;
+
+        if (elementTop < windowHeight - elementVisible) {
+            slider[i].classList.add('show');
+        }
+    }
+  }
+
+  window.addEventListener('scroll', reveal);
+</script>
+
+<!-- script rekening -->
+<script>
+  const sendGiftBtn = document.querySelector('.send-gift-btn');
+const giftSection = document.querySelector('.row.justify-content-center.text-center');
+
+// Tambahkan class untuk fade-in/fade-out
+giftSection.classList.add('fade-transition');
+
+// Sembunyikan daftar bank di awal
+giftSection.style.display = 'none';
+
+// Tambahkan event listener untuk tombol
+sendGiftBtn.addEventListener('click', function() {
+    // Cek apakah elemen sedang disembunyikan
+    if (giftSection.style.display === 'none') {
+        // Tampilkan elemen, lalu tambahkan class 'fade-in'
+        giftSection.style.display = 'block';
+        setTimeout(() => {
+            giftSection.classList.remove('fade-out');
+            giftSection.classList.add('fade-in');
+        }, 10); // sedikit delay agar display:block diterapkan lebih dulu
+    } else {
+        // Tambahkan class 'fade-out' untuk animasi menghilang
+        giftSection.classList.remove('fade-in');
+        giftSection.classList.add('fade-out');
+
+        // Sembunyikan elemen setelah animasi selesai (1.5s)
+        setTimeout(() => {
+            giftSection.style.display = 'none';
+        }, 1500); // Sesuai dengan durasi transisi di CSS
+    }
+});
+
+</script>
+
+<script>
+  //script tombol salin rekening
+    function copyToClipboard(text) {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        alert('Nomor rekening berhasil disalin!');
+    }
+</script>
+
+<script>
+  // script menyimpan tanggal ke kalender
+  const saveDateBtn = document.querySelector('.save-date-btn');
+
+// Set the wedding date and time
+const weddingDate = new Date('February 7, 2026 10:00:00'); 
+
+// Function to format the date for the calendar link
+const formatDateForCalendar = (date) => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+};
+
+saveDateBtn.addEventListener('click', function() {
+  const title = 'Pernikahan [Nama Mempelai Pria] & [Nama Mempelai Wanita]';
+  const description = 'Kami mengundang Anda untuk merayakan hari istimewa kami. Ditunggu kehadirannya!';
+  const location = 'Alamat atau Nama Lokasi Acara'; // Ganti dengan lokasi acara yang sebenarnya
+  const startDate = formatDateForCalendar(weddingDate);
+  const endDate = formatDateForCalendar(new Date(weddingDate.getTime() + 2 * 60 * 60 * 1000)); // Tambah 2 jam durasi acara
+
+  const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}&sf=true&output=xml`;
+
+  window.open(googleCalendarUrl, '_blank');
+});
+
+</script>
+
 </body>
 
 </html>
